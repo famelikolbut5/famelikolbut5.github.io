@@ -31,6 +31,6 @@ async function enterMobileArtwork(){
   root.classList.remove('mobile-intro-pending');
   if(!canAnimate)return;
   root.classList.add('mobile-intro-ready');
-  stage.querySelector('.small-shot').addEventListener('animationend',()=>root.classList.remove('mobile-intro-ready'),{once:true});
+  // Keep the final animation state, as on desktop, without switching render layers.
 }
 enterMobileArtwork();
