@@ -153,7 +153,8 @@
 html{overflow-x:hidden}
 @supports(overflow:clip){html{overflow-x:clip}}
 @media(max-width:900px){
-  .atelier .hero h1,.atelier .side-shot,.atelier .main-shot,.atelier .small-shot{animation:none}
+  .atelier .side-shot,.atelier .main-shot,.atelier .small-shot{animation:none}
+  .atelier .hero h1{animation:atelier-mobile-name 500ms cubic-bezier(.2,.7,.3,1) both}
   .atelier .hero h1{clip-path:none}
   .atelier .hero-stage img{box-shadow:0 12px 24px #3e453520}
 }
@@ -161,3 +162,5 @@ html{overflow-x:hidden}
   .work-image:hover img{transform:none}
   .atelier .work-image:hover{background:#e7e9df}
 }
+
+@keyframes atelier-mobile-name{from{transform:translateY(8px)}to{transform:none}}
