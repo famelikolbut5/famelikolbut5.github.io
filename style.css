@@ -153,8 +153,7 @@
 html{overflow-x:hidden}
 @supports(overflow:clip){html{overflow-x:clip}}
 @media(max-width:900px){
-  .atelier .side-shot,.atelier .main-shot,.atelier .small-shot{animation:none}
-  .atelier .hero h1{animation:atelier-mobile-name 500ms cubic-bezier(.2,.7,.3,1) both}
+  .atelier .hero h1,.atelier .side-shot,.atelier .main-shot,.atelier .small-shot{animation:none}
   .atelier .hero h1{clip-path:none}
   .atelier .hero-stage img{box-shadow:0 12px 24px #3e453520}
 }
@@ -163,4 +162,14 @@ html{overflow-x:hidden}
   .atelier .work-image:hover{background:#e7e9df}
 }
 
-@keyframes atelier-mobile-name{from{transform:translateY(8px)}to{transform:none}}
+
+@media(max-width:900px){
+  .atelier .hero-stage{overflow:hidden;overflow:clip;overflow-clip-margin:5vw}
+  .mobile-intro-pending .atelier .hero h1{visibility:hidden}
+  .mobile-intro-pending .atelier .hero-stage img{opacity:0}
+  .mobile-intro-ready .atelier .hero h1{animation:atelier-name 850ms cubic-bezier(.16,1,.3,1) both}
+  .mobile-intro-ready .atelier .side-shot{animation:atelier-top 1100ms cubic-bezier(.16,1,.3,1) 120ms both}
+  .mobile-intro-ready .atelier .main-shot{animation:atelier-main 1100ms cubic-bezier(.16,1,.3,1) 300ms both}
+  .mobile-intro-ready .atelier .small-shot{animation:atelier-front 1100ms cubic-bezier(.16,1,.3,1) 480ms both}
+  .mobile-intro-ready .atelier .hero-stage>div{will-change:transform,opacity}
+}

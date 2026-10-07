@@ -18,19 +18,19 @@ const motionEnabled=()=>!window.matchMedia('(prefers-reduced-motion: reduce)').m
 document.querySelectorAll('[data-screen]').forEach(b=>b.addEventListener('click',()=>{if(motionEnabled())document.querySelector('.selected-screen').animate([{opacity:.65,transform:'translateY(5px)'},{opacity:1,transform:'none'}],{duration:220,easing:'ease-out'})}));
 document.querySelectorAll('[data-work],[data-cert]').forEach(b=>b.addEventListener('click',()=>{if(motionEnabled())(b.hasAttribute('data-cert')?certDialog:dialog).animate([{opacity:.65},{opacity:1}],{duration:220,easing:'ease-out'})}));
 
-// Keep mobile artwork visible while loading; animate only a settled first view.
+// Decode the artwork before the original entrance; never restart it during scrolling.
 async function enterMobileArtwork(){
+  const root=document.documentElement;
   const stage=document.querySelector('.atelier .hero-stage');
-  if(!stage||!window.matchMedia('(max-width:900px)').matches||!motionEnabled())return;
-  const start=performance.now(),initialScroll=window.scrollY;
+  if(!stage||!root.classList.contains('mobile-intro-pending'))return;
+  const initialScroll=window.scrollY;
   const images=[...stage.querySelectorAll('img')];
   await Promise.all([document.fonts.ready,...images.map(img=>img.decode().catch(()=>{}))]);
   const bounds=stage.getBoundingClientRect();
-  if(performance.now()-start>1200||Math.abs(window.scrollY-initialScroll)>24||bounds.top>=window.innerHeight||bounds.bottom<=0||document.visibilityState!=='visible'||!motionEnabled()||!window.matchMedia('(max-width:900px)').matches)return;
-  images.forEach((img,index)=>{
-    if(!img.naturalWidth)return;
-    const angle=img.classList.contains('side-shot')?5:img.classList.contains('main-shot')?-3:4;
-    img.animate([{transform:`rotate(${angle}deg)`},{transform:`translateY(-12px) rotate(${angle}deg)`,offset:.45},{transform:`rotate(${angle}deg)`}],{duration:850,delay:index*60,easing:'cubic-bezier(.2,.7,.3,1)'});
-  });
+  const canAnimate=root.classList.contains('mobile-intro-pending')&&images.every(img=>img.naturalWidth>0)&&Math.abs(window.scrollY-initialScroll)<24&&bounds.top<window.innerHeight&&bounds.bottom>0&&document.visibilityState==='visible'&&motionEnabled()&&window.matchMedia('(max-width:900px)').matches;
+  root.classList.remove('mobile-intro-pending');
+  if(!canAnimate)return;
+  root.classList.add('mobile-intro-ready');
+  stage.querySelector('.small-shot').addEventListener('animationend',()=>root.classList.remove('mobile-intro-ready'),{once:true});
 }
 enterMobileArtwork();
