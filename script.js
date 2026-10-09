@@ -1,10 +1,24 @@
 let panelInvoker=null, panelScroll=0;
 function showPanel(panel){panelInvoker=document.activeElement;panelScroll=window.scrollY;window.scrollTo({top:0,behavior:'instant'});panel.hidden=false;document.querySelector('.wrap').inert=true;document.body.style.overflow='hidden';panel.querySelector('.close').focus({preventScroll:true})}
-function hidePanel(panel){panel.hidden=true;document.querySelector('.wrap').inert=false;document.body.style.overflow='';window.scrollTo({top:panelScroll,behavior:'instant'});panelInvoker?.focus({preventScroll:true})}
-document.addEventListener('keydown',e=>{const panel=document.querySelector('[role="dialog"]:not([hidden])');if(!panel)return;if(e.key==='Escape'){hidePanel(panel);e.preventDefault()}if(e.key==='Tab'){const controls=[...panel.querySelectorAll('button,a[href]')];const first=controls[0],last=controls.at(-1);if(e.shiftKey&&document.activeElement===first){last.focus();e.preventDefault()}else if(!e.shiftKey&&document.activeElement===last){first.focus();e.preventDefault()}}});
+function hidePanel(panel){const video=panel.querySelector('video');if(video){video.pause();video.removeAttribute('src');video.load();}panel.hidden=true;document.querySelector('.wrap').inert=false;document.body.style.overflow='';window.scrollTo({top:panelScroll,behavior:'instant'});panelInvoker?.focus({preventScroll:true})}
+document.addEventListener('keydown',e=>{const panel=document.querySelector('[role="dialog"]:not([hidden])');if(!panel)return;if(e.key==='Escape'){hidePanel(panel);e.preventDefault()}if(e.key==='Tab'){const controls=[...panel.querySelectorAll('button,a[href],video[controls]:not([hidden])')].filter(el=>el.getClientRects().length);const first=controls[0],last=controls.at(-1);if(e.shiftKey&&document.activeElement===first){last.focus();e.preventDefault()}else if(!e.shiftKey&&document.activeElement===last){first.focus();e.preventDefault()}}});
 const works=[{"key": "echo-studio", "title": "Echo Studio", "category": "Аудио и расшифровка", "desc": "Расшифровка аудио, навигация по репликам и проверка текста по чек-листу.", "stack": "Python / React / faster-whisper"}, {"key": "supply", "title": "Supply", "category": "Каталог и подбор", "desc": "Каталог мебели с AI-помощником для подбора товаров и расчётом предложения.", "stack": "Python / React / Codex CLI"}, {"key": "threadflow", "title": "Threadflow", "category": "Автоматизация", "desc": "Обработка заявок по заданному сценарию, история выполнения и повтор шага после ошибки.", "stack": "Python / React Flow / SQLite"}, {"key": "framecraft", "title": "Framecraft", "category": "Видео и интерфейсы", "desc": "Редактор коротких видео: выбор фрагмента, добавление титров и экспорт вертикального ролика.", "stack": "Python / React / FFmpeg"}, {"key": "roam-crm", "title": "Roam CRM", "category": "CRM и мобильный интерфейс", "desc": "CRM туристической команды: заявки и бронирования, карточки клиентов и мобильный маршрут гида с отметками участников.", "stack": "React / Node.js / PostgreSQL"}, {"key": "docledger", "title": "Docledger", "category": "Документы и процессы", "desc": "Реестр договоров, счетов и актов: поиск, согласование, история изменений, архив и выгрузка в CSV.", "stack": "React / Node.js / PostgreSQL"}];
+works.push({key:'garden',title:'Garden',category:'Интерактивное демо',desc:'Сказочная оранжерея с живым фоном и котом, который реагирует на движение курсора и нажатия. Запись самостоятельного интерактивного демо.',stack:'JavaScript / WebGL / Анимация',image:'assets/garden.jpg',video:'assets/garden-demo.mp4'});
 const dialog=document.querySelector('.viewer');
-function openWork(key){const p=works.find(p=>p.key===key);dialog.querySelector('h2').textContent=p.title;dialog.querySelector('img').src='assets/'+key+'.webp';dialog.querySelector('img').alt=p.title+' - интерфейс проекта';dialog.querySelector('p').textContent=p.desc;dialog.querySelector('a').href='https://github.com/famelikolbut5/'+key;showPanel(dialog)}
+function openWork(key){
+ const p=works.find(p=>p.key===key);if(!p)return;
+ const image=dialog.querySelector('img'),video=dialog.querySelector('video');
+ dialog.querySelector('h2').textContent=p.title;
+ image.hidden=!!p.video;video.hidden=!p.video;
+ dialog.querySelector('.viewer-info p').textContent=p.desc;
+ dialog.querySelector('.viewer-info>a').href='https://github.com/famelikolbut5/'+key;
+ if(p.video){
+  video.poster=p.image;video.src=p.video;video.muted=false;video.volume=1;
+ }else{image.src=p.image||'assets/'+key+'.webp';image.alt=p.title+' — интерфейс проекта';}
+ showPanel(dialog);
+ if(p.video)video.play().catch(()=>{/* Native controls remain available if playback is blocked. */});
+}
+
 document.querySelectorAll('[data-work]').forEach(b=>b.addEventListener('click',()=>openWork(b.dataset.work)));
 dialog.querySelector('.close').addEventListener('click',()=>hidePanel(dialog));dialog.addEventListener('click',e=>{if(e.target===dialog)hidePanel(dialog)});
 document.querySelectorAll('[data-screen]').forEach(b=>b.addEventListener('click',()=>{const key=b.dataset.screen;document.querySelector('.selected-screen').src='assets/'+key+'.webp';document.querySelector('.selected-screen').alt=works.find(p=>p.key===key).title+' - интерфейс проекта';document.querySelector('.hero-stage [data-work]').dataset.work=key;document.querySelectorAll('[data-screen]').forEach(t=>t.setAttribute('aria-selected',String(t===b)))}));

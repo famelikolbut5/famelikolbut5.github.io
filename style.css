@@ -182,3 +182,16 @@ html{overflow-x:hidden}
 @media(max-width:900px){
   .atelier .side-shot img,.atelier .main-shot img,.atelier .small-shot{outline:1px solid transparent}
 }
+
+/* Garden: recorded interactive demo. The landing loads video only on request. */
+.project-garden{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1.6fr) minmax(260px,1fr);gap:42px;align-items:center;padding-top:12px}
+.atelier .garden-cover{position:relative;isolation:isolate;padding:22px;background:#302c42;border-radius:14px;aspect-ratio:1.6}
+.garden-cover-backdrop{position:absolute;inset:-24px;background:url('assets/garden.jpg') center/cover;filter:blur(18px) brightness(.65);z-index:-1}
+.garden-cover img{display:block;position:relative;aspect-ratio:auto;border-radius:7px;box-shadow:0 12px 28px #100c2940}
+.garden-play{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:flex;align-items:center;gap:9px;white-space:nowrap;border:1px solid #ffffff40;background:#fffaf1;color:#352d43;border-radius:30px;padding:9px 15px;font-size:12px;box-shadow:0 4px 20px #100c2930}
+.garden-category{color:var(--accent);font-size:12px}.project-garden .project-heading{margin-top:9px;gap:20px}.project-garden h3{font-size:34px}.project-garden p{max-width:420px}.garden-video-note{display:block;font-size:11px;color:var(--muted);margin-top:22px}
+.viewer>img[hidden],.project-video[hidden],.viewer-credit[hidden]{display:none!important}
+.project-video{display:block;width:100%;max-height:60vh;background:#171a20;object-fit:contain}
+.viewer-credit{margin:0;padding:0 28px 22px;font-size:11px;line-height:1.65;color:var(--muted)}.viewer-credit a{text-decoration:underline;text-underline-offset:2px}
+@media(max-width:900px){.project-garden{gap:26px;grid-template-columns:1.2fr 1fr}.project-garden .project-heading{display:block}.project-garden .project-heading a{display:inline-block;margin-top:7px}.project-garden h3{font-size:28px}.garden-video-note{margin-top:12px}}
+@media(max-width:600px){.project-garden{display:block;padding-top:0}.project-garden .project-copy{margin-top:18px}.project-garden .project-heading{display:flex;align-items:center}.project-garden .project-heading a{margin:0}.atelier .garden-cover{padding:14px}.garden-play{font-size:11px;padding:8px 13px;bottom:10px}.project-video{max-height:52svh}.viewer-credit{padding:0 18px 18px}.project-garden h3{font-size:23px}}
