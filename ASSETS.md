@@ -8,7 +8,7 @@ MIT распространяется на код сайта. Лицензии ш
 
 ## Garden
 
-Обложка `assets/garden.jpg` — предоставленный автором скриншот демо. `assets/garden-demo.mp4` — запись экрана Garden, обрезанная с 3.0 до 37.1 секунды исходника; интерфейс записи и переключение окон удалены. Видео H.264, аудио AAC, плавное затухание звука в конце. Исходники и описание: https://github.com/famelikolbut5/garden.
+Обложка `assets/garden.jpg` — предоставленный автором скриншот демо. `assets/garden-demo.mp4` — готовая запись экрана Garden, предоставленная автором и опубликованная целиком без дополнительной обрезки или перекодирования. Исходники и описание: https://github.com/famelikolbut5/garden.
 
 “Fairytale Waltz” Kevin MacLeod (incompetech.com). Licensed under Creative Commons: By Attribution 4.0 License — https://creativecommons.org/licenses/by/4.0/
 
