@@ -168,9 +168,9 @@ html{overflow-x:hidden}
   .atelier .side-shot{transform:rotate(5deg)}
   .atelier .main-shot{transform:rotate(-3deg)}
   .atelier .small-shot{transform:rotate(4deg)}
-  .mobile-intro-pending .atelier .hero h1{visibility:hidden}
+
   .mobile-intro-pending .atelier .hero-stage img{opacity:0}
-  .mobile-intro-ready .atelier .hero h1{animation:atelier-name 850ms cubic-bezier(.16,1,.3,1) both}
+
   .mobile-intro-ready .atelier .side-shot{animation:atelier-top 1100ms cubic-bezier(.16,1,.3,1) 120ms both}
   .mobile-intro-ready .atelier .main-shot{animation:atelier-main 1100ms cubic-bezier(.16,1,.3,1) 300ms both}
   .mobile-intro-ready .atelier .small-shot{animation:atelier-front 1100ms cubic-bezier(.16,1,.3,1) 480ms both}
@@ -195,3 +195,24 @@ html{overflow-x:hidden}
 .viewer-credit{margin:0;padding:0 28px 22px;font-size:11px;line-height:1.65;color:var(--muted)}.viewer-credit a{text-decoration:underline;text-underline-offset:2px}
 @media(max-width:900px){.project-garden{gap:26px;grid-template-columns:1.2fr 1fr}.project-garden .project-heading{display:block}.project-garden .project-heading a{display:inline-block;margin-top:7px}.project-garden h3{font-size:28px}.garden-video-note{margin-top:12px}}
 @media(max-width:600px){.project-garden{display:block;padding-top:0}.project-garden .project-copy{margin-top:18px}.project-garden .project-heading{display:flex;align-items:center}.project-garden .project-heading a{margin:0}.atelier .garden-cover{padding:14px}.garden-play{font-size:11px;padding:8px 13px;bottom:10px}.project-video{max-height:52svh}.viewer-credit{padding:0 18px 18px}.project-garden h3{font-size:23px}}
+
+/* Services and direct contact methods extend the existing Atelier typography. */
+.atelier{--muted:#62665d}
+main{display:block}.services{padding:0 0 100px}.service-list{display:grid;grid-template-columns:1fr 1fr;gap:0 48px}.service-link{display:block;border-top:1px solid var(--line);padding:28px 0 32px}.service-link h3{font-size:25px;font-weight:500;line-height:1.3}.service-link p{max-width:58ch;font-size:14px;color:var(--muted);margin:14px 0}.service-link>span{font-size:13px;text-decoration:underline;text-underline-offset:5px}.service-link:hover h3{color:var(--accent)}
+.contact-methods{display:grid;grid-template-columns:1fr 1fr;gap:30px 48px;align-items:start;font-size:17px}.contact-methods a,.max-contact{display:flex;flex-direction:column;align-items:flex-start;overflow-wrap:anywhere}.contact-methods a>span,.max-contact>span:first-child{font-size:13px;color:var(--muted);margin-bottom:5px}.copy-max{display:flex;flex-direction:column;align-items:flex-start;width:100%;padding:0;border-bottom:1px solid #678072;text-align:left;font-size:17px;color:#c5ccbf}.copy-max>span:first-child{font-size:13px;color:var(--muted);margin-bottom:5px}.copy-status{font-size:12px;min-height:1.65em}
+.service-page nav{border-bottom:1px solid var(--line)}.service-hero{padding:65px 0 55px;max-width:1000px}.service-hero h1{font-family:var(--display);font-weight:400;font-size:clamp(38px,4.7vw,70px);letter-spacing:-1.8px;line-height:1.18}.service-hero>p{max-width:65ch;margin:26px 0;font-size:18px;color:var(--muted)}.service-detail{display:grid;grid-template-columns:1fr 1fr;gap:60px;padding:48px 0 70px;border-top:1px solid var(--line)}.service-detail h2,.service-faq h2,.related-services h2{font-size:30px;font-weight:500;line-height:1.3;margin-bottom:24px}.task{margin-bottom:25px}.task h3{font-weight:500;font-size:19px;margin-bottom:7px}.task p,.service-detail p{max-width:65ch;color:var(--muted)}.service-example img{border-radius:10px;margin:25px 0 18px;width:100%}.service-example a{text-decoration:underline;text-underline-offset:4px}.service-faq{padding:45px 0 65px;border-top:1px solid var(--line);max-width:900px}.service-faq details{border-bottom:1px solid var(--line);padding:20px 0}.service-faq summary{cursor:pointer;font-size:18px}.service-faq details p{margin-top:13px;max-width:70ch;color:var(--muted)}.related-services{padding:25px 0 60px}.related-services ul{padding-left:20px}.related-services li{margin:12px 0}.related-services a{text-decoration:underline;text-underline-offset:4px}
+@media(max-width:900px){.atelier .hero h1{animation:atelier-name 850ms cubic-bezier(.16,1,.3,1) both}.service-detail{gap:35px}.navigation{gap:14px}.nav-contact{padding:8px 14px}}
+@media(max-width:600px){.service-list,.service-detail,.contact-methods{grid-template-columns:1fr}.services{padding-bottom:60px}.service-link{padding:22px 0}.service-link h3{font-size:22px}.service-hero{padding:38px 0}.service-hero h1{letter-spacing:-1px}.service-hero>p{font-size:16px}.service-detail{gap:30px;padding:32px 0 45px}.service-detail h2,.service-faq h2,.related-services h2{font-size:25px}.service-page nav{gap:16px}.navigation{gap:11px;font-size:12px}.atelier:not(.service-page) .navigation a[href="#experience"]{display:none}.nav-contact{padding:7px 10px}}
+
+.atelier .contact{padding:62px 6vw 32px;--muted:#c5ccbf}
+.atelier .contact h2{font-size:clamp(36px,4.8vw,64px);line-height:1.15;letter-spacing:-1.6px;max-width:1000px}
+.contact-methods{margin-top:34px;gap:28px 48px;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start}
+.contact-methods>a,.copy-max{min-height:65px;padding-bottom:12px;box-sizing:border-box;line-height:1.6;justify-content:flex-start}
+.contact-methods a>span,.copy-max>span:first-child{display:block;font-size:13px;line-height:1.6;margin:0 0 7px}
+.max-contact{position:relative;display:block;width:100%}.copy-max{font-size:17px}.copy-status{position:absolute;left:0;top:calc(100% + 3px);font-size:12px;min-height:0;line-height:1.4}
+.atelier .contact footer{margin-top:42px;gap:20px}.footer-github{display:inline-block;margin-left:18px;border-bottom:1px solid #678072;font-size:12px}
+@media(max-width:900px){.atelier .contact{padding-inline:5vw}}
+@media(max-width:600px){.atelier .contact{padding-top:40px;padding-bottom:26px}.atelier .contact h2{font-size:36px;letter-spacing:-1px}.contact-methods{grid-template-columns:minmax(0,1fr);margin-top:28px;gap:25px}.contact-methods>a,.copy-max{min-height:61px;font-size:16px}.atelier .contact footer{margin-top:34px;flex-wrap:wrap;gap:12px;font-size:11px}}
+
+.atelier .contact{--muted:#c5ccbf}
+@media(prefers-reduced-motion:reduce){.atelier .hero h1{animation:none!important}}

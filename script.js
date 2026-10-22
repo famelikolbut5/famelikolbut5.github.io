@@ -36,10 +36,11 @@ document.querySelectorAll('[data-work],[data-cert]').forEach(b=>b.addEventListen
 async function enterMobileArtwork(){
   const root=document.documentElement;
   const stage=document.querySelector('.atelier .hero-stage');
-  if(!stage||!root.classList.contains('mobile-intro-pending'))return;
+  if(!stage)return;
+  if(window.matchMedia('(max-width:900px)').matches&&motionEnabled())root.classList.add('mobile-intro-pending');
   const initialScroll=window.scrollY;
   const images=[...stage.querySelectorAll('img')];
-  await Promise.all([document.fonts.ready,...images.map(img=>img.decode().catch(()=>{}))]);
+  await Promise.all(images.map(img=>img.decode().catch(()=>{})));
   const bounds=stage.getBoundingClientRect();
   const canAnimate=root.classList.contains('mobile-intro-pending')&&images.every(img=>img.naturalWidth>0)&&Math.abs(window.scrollY-initialScroll)<24&&bounds.top<window.innerHeight&&bounds.bottom>0&&document.visibilityState==='visible'&&motionEnabled()&&window.matchMedia('(max-width:900px)').matches;
   root.classList.remove('mobile-intro-pending');

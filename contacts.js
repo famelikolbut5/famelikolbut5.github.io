@@ -1,0 +1,2 @@
+const copyTimers=new WeakMap();
+document.querySelectorAll('[data-copy]').forEach(button=>button.addEventListener('click',async()=>{const status=button.parentElement.querySelector('.copy-status');clearTimeout(copyTimers.get(button));try{await navigator.clipboard.writeText(button.dataset.copy);status.textContent=button.dataset.contact==='email'?'Адрес почты скопирован':'Номер скопирован';}catch{status.textContent='Скопируйте: '+button.dataset.copy;}copyTimers.set(button,setTimeout(()=>{status.textContent='';copyTimers.delete(button);},3000));}));
