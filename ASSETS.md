@@ -15,3 +15,7 @@ MIT распространяется на код сайта. Лицензии ш
 Источник: https://incompetech.com/music/royalty-free/index.html?Search=Search&isrc=USUAN1100232
 
 Изменения музыки: преобразование в AAC, пониженная громкость, повтор в демо и затухание в конце записи. Указание авторства также показано под видеоплеером.
+
+## Portfolio mark
+
+`assets/logo-code.svg` and the favicon use Phosphor Icons `cube-transparent` (fill), MIT licensed. Original path geometry is preserved. Source: https://raw.githubusercontent.com/phosphor-icons/core/2b75f3ad12b420c9504ef05df8d2564a28f8500e/assets/fill/cube-transparent-fill.svg. License and attribution: `THIRD_PARTY_NOTICES.txt`.
