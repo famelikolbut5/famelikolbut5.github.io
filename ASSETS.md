@@ -18,4 +18,4 @@ MIT распространяется на код сайта. Лицензии ш
 
 ## Portfolio mark
 
-`assets/logo-code.svg` and the favicon use Phosphor Icons `cube-transparent` (fill), MIT licensed. Original path geometry is preserved. Source: https://raw.githubusercontent.com/phosphor-icons/core/2b75f3ad12b420c9504ef05df8d2564a28f8500e/assets/fill/cube-transparent-fill.svg. License and attribution: `THIRD_PARTY_NOTICES.txt`.
+`assets/logo-code.svg` uses Phosphor Icons `cube-transparent` (fill), MIT licensed. Original path geometry is preserved. The SVG/ICO favicon uses the original letter A design. Source: https://raw.githubusercontent.com/phosphor-icons/core/2b75f3ad12b420c9504ef05df8d2564a28f8500e/assets/fill/cube-transparent-fill.svg. License and attribution: `THIRD_PARTY_NOTICES.txt`.
