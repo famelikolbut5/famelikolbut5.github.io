@@ -1,9 +1,42 @@
-let panelInvoker=null, panelScroll=0;
-function showPanel(panel){panelInvoker=document.activeElement;panelScroll=window.scrollY;window.scrollTo({top:0,behavior:'instant'});panel.hidden=false;document.querySelector('.wrap').inert=true;document.body.style.overflow='hidden';panel.querySelector('.close').focus({preventScroll:true})}
-function hidePanel(panel){const video=panel.querySelector('video');if(video){video.pause();video.removeAttribute('src');video.load();}panel.hidden=true;document.querySelector('.wrap').inert=false;document.body.style.overflow='';window.scrollTo({top:panelScroll,behavior:'instant'});panelInvoker?.focus({preventScroll:true})}
+let panelInvoker=null, panelRequest=0, panelScroll=0;
+const panelImages=new Map();
+const panelImageCache=document.createElement('div');panelImageCache.hidden=true;panelImageCache.className='viewer-preload-cache';panelImageCache.setAttribute('aria-hidden','true');document.body.append(panelImageCache);
+function preparePanelImage(src){
+ if(!panelImages.has(src)){
+  const image=new Image();image.decoding='async';image.fetchPriority='low';image.src=src;panelImageCache.append(image);
+  panelImages.set(src,image.decode().then(()=>image).catch(error=>{panelImages.delete(src);throw error;}));
+ }
+ return panelImages.get(src);
+}
+function fitPanel(panel){
+ const ratio=Number(panel.dataset.mediaRatio)||16/9;
+ const maxWidth=Math.min(panel.classList.contains('cert-viewer')?1050:1200,innerWidth*.94);
+ const maxHeight=innerHeight*.9;
+ let width=maxWidth;
+ for(let i=0;i<6;i++){
+  panel.style.width=width+'px';
+  const chrome=panel.querySelector('header').getBoundingClientRect().height+(panel.querySelector('.viewer-info')?.getBoundingClientRect().height||0)+2;
+  const next=Math.min(maxWidth,Math.max(1,maxHeight-chrome)*ratio);
+  if(Math.abs(next-width)<.5)break;
+  width=Math.min(width,next);
+ }
+ panel.style.width=width+'px';
+ panel.style.setProperty('--viewer-media-height',(Math.max(1,(width-2)/ratio))+'px');
+}
+function showPanel(panel){
+ const previous=document.querySelector('[role="dialog"]:not([hidden])');
+ if(previous&&previous!==panel)previous.hidden=true;
+ panelInvoker=document.activeElement;panelScroll=window.scrollY;
+ panel.style.visibility='hidden';panel.hidden=false;fitPanel(panel);panel.scrollTop=0;
+ document.querySelector('.wrap').inert=true;document.body.classList.add('panel-open');
+ document.body.style.top=-panelScroll+'px';document.body.style.position='fixed';document.body.style.width='100%';document.body.style.overflow='hidden';
+ panel.style.visibility='';panel.querySelector('.close').focus({preventScroll:true});
+}
+function hidePanel(panel){++panelRequest;const video=panel.querySelector('video');if(video){video.pause();video.removeAttribute('src');video.load();}document.body.style.position='';document.body.style.top='';document.body.style.width='';document.body.style.overflow='';window.scrollTo({top:panelScroll,behavior:'instant'});panel.hidden=true;document.querySelector('.wrap').inert=false;document.body.classList.remove('panel-open');panelInvoker?.focus({preventScroll:true})}
+window.addEventListener('resize',()=>{const panel=document.querySelector('[role="dialog"]:not([hidden])');if(panel)fitPanel(panel);});
 document.addEventListener('keydown',e=>{const panel=document.querySelector('[role="dialog"]:not([hidden])');if(!panel)return;if(e.key==='Escape'){hidePanel(panel);e.preventDefault()}if(e.key==='Tab'){const controls=[...panel.querySelectorAll('button,a[href],video[controls]:not([hidden])')].filter(el=>el.getClientRects().length);const first=controls[0],last=controls.at(-1);if(e.shiftKey&&document.activeElement===first){last.focus();e.preventDefault()}else if(!e.shiftKey&&document.activeElement===last){first.focus();e.preventDefault()}}});
 const works=[{"key": "echo-studio", "title": "Echo Studio", "category": "Аудио и расшифровка", "desc": "Расшифровка аудио, навигация по репликам и проверка текста по чек-листу.", "stack": "Python / React / faster-whisper"}, {"key": "supply", "title": "Supply", "category": "Каталог и подбор", "desc": "Каталог мебели с AI-помощником для подбора товаров и расчётом предложения.", "stack": "Python / React / Codex CLI"}, {"key": "threadflow", "title": "Threadflow", "category": "Автоматизация", "desc": "Обработка заявок по заданному сценарию, история выполнения и повтор шага после ошибки.", "stack": "Python / React Flow / SQLite"}, {"key": "framecraft", "title": "Framecraft", "category": "Видео и интерфейсы", "desc": "Редактор коротких видео: выбор фрагмента, добавление титров и экспорт вертикального ролика.", "stack": "Python / React / FFmpeg"}, {"key": "roam-crm", "title": "Roam CRM", "category": "CRM и мобильный интерфейс", "desc": "CRM туристической команды: заявки и бронирования, карточки клиентов и мобильный маршрут гида с отметками участников.", "stack": "React / Node.js / PostgreSQL"}, {"key": "docledger", "title": "Docledger", "category": "Документы и процессы", "desc": "Реестр договоров, счетов и актов: поиск, согласование, история изменений, архив и выгрузка в CSV.", "stack": "React / Node.js / PostgreSQL"}];
-works.push({key:'garden',title:'Garden',category:'Интерактивное демо',desc:'Сказочная оранжерея с живым фоном и котом, который реагирует на движение курсора и нажатия. Запись самостоятельного интерактивного демо.',stack:'JavaScript / WebGL / Анимация',image:'assets/garden.jpg',video:'assets/garden-demo.mp4?v=a203cabcdc26'});
+works.push({key:'garden',title:'Garden',category:'Интерактивное демо',desc:'Сказочная оранжерея с живым фоном и котом, который реагирует на движение курсора и нажатия. Запись интерактивного демо.',stack:'JavaScript / WebGL / Анимация',image:'assets/garden.jpg',video:'assets/garden-demo.mp4?v=a203cabcdc26'});
 
 works.unshift(
  {key:'unique-travel',title:'Unique Travel',category:'Приложения для iOS и Android',desc:'Два приложения для туристов и гидов, связанные с CRM.',stack:'React / TypeScript / Capacitor',private:true,phones:true},
@@ -14,10 +47,10 @@ works.unshift(
 const dialog=document.querySelector('.viewer');
 const viewerPhoneVectors=new Map();
 function renderViewerPhoneVectors(root){
- root.querySelectorAll('img.device-mockup').forEach((image,index)=>{
+ return Promise.all([...root.querySelectorAll('img.device-mockup')].map((image,index)=>{
   const source=image.dataset.src||image.src;
   if(!viewerPhoneVectors.has(source))viewerPhoneVectors.set(source,fetch(source).then(response=>{if(!response.ok)throw new Error('Phone preview unavailable');return response.text();}));
-  viewerPhoneVectors.get(source).then(text=>{
+  return Promise.all([viewerPhoneVectors.get(source),preparePanelImage(source)]).then(([text])=>{
    if(!image.isConnected)return;
    const prefix='viewer-phone-'+index+'-';
    text=text.replace(/id="([^"]+)"/g,(_,id)=>'id="'+prefix+id+'"').replace(/url\(#([^)]+)\)/g,(_,id)=>'url(#'+prefix+id+')');
@@ -26,10 +59,15 @@ function renderViewerPhoneVectors(root){
    svg.setAttribute('class','device-mockup');svg.setAttribute('role','img');svg.setAttribute('aria-label',image.alt);
    image.replaceWith(document.importNode(svg,true));
   }).catch(()=>{/* The original SVG image remains available as a fallback. */});
- });
+ }));
 }
-function openWork(key,animateMascot=true){
+async function openWork(key,animateMascot=true){
  const p=works.find(p=>p.key===key);if(!p)return;
+ const request=++panelRequest;
+ const source=p.mascot&&!animateMascot?'assets/agency-crm.webp?v=bda868b1c8a6':p.image||'assets/'+key+'.webp?v=framed20261029b';
+ let prepared;
+ try{prepared=await preparePanelImage(p.phones?'assets/unique-travel-background.webp':source);}catch(error){console.error('Project preview could not load',error);return;}
+ if(request!==panelRequest)return;
  const hasMascot=!!p.mascot&&animateMascot;
  const image=dialog.querySelector('img'),video=dialog.querySelector('video');
  dialog.querySelector('h2').textContent=p.title;
@@ -44,13 +82,14 @@ function openWork(key,animateMascot=true){
  let phones=dialog.querySelector('.viewer-phones');
  if(p.phones&&!phones){phones=document.createElement('div');phones.className='viewer-phones';phones.innerHTML=document.querySelector('[data-work="unique-travel"] .app-devices').outerHTML;dialog.querySelector('.viewer-media').append(phones);phones.querySelectorAll('.bird-preview').forEach(observeMascot);}
  if(phones)phones.hidden=!p.phones;
- if(p.phones)renderViewerPhoneVectors(phones);
+ if(p.phones){await renderViewerPhoneVectors(phones);if(request!==panelRequest)return;}
  let mascot=dialog.querySelector('.viewer-bip');
  if(hasMascot&&!mascot){mascot=document.createElement('img');mascot.className='viewer-bip bip-preview';mascot.alt='';mascot.width=1280;mascot.height=720;mascot.fetchPriority='low';mascot.dataset.animation='assets/bip-preview.webp?v=f96472ee8164';mascot.src='assets/bip-still.webp?v=73e628c5a980';const frame=document.createElement('span');frame.className='bip-frame viewer-bip-frame';frame.append(mascot);dialog.querySelector('.viewer-media').append(frame);observeMascot(mascot);}
  if(mascot){mascot.hidden=!hasMascot;mascot.parentElement.hidden=!hasMascot;}
  if(p.video){
   video.poster=p.image;video.src=p.video;video.muted=false;video.volume=1;
- }else if(!p.phones){image.src=p.mascot&&!hasMascot?'assets/agency-crm.webp?v=bda868b1c8a6':p.image||'assets/'+key+'.webp';image.alt=p.title+' | интерфейс проекта';}
+ }else if(!p.phones){image.src=source;image.alt=p.title+' | интерфейс проекта';await image.decode();if(request!==panelRequest)return;}
+ dialog.dataset.mediaRatio=p.phones?1.6:p.video?16/9:prepared.naturalWidth/prepared.naturalHeight;
  showPanel(dialog);
  if(p.phones)dialog.scrollTop=0;
  if(p.video)video.play().catch(()=>{/* Native controls remain available if playback is blocked. */});
@@ -61,13 +100,21 @@ dialog.querySelector('.close').addEventListener('click',()=>hidePanel(dialog));d
 document.querySelectorAll('[data-screen]').forEach(b=>b.addEventListener('click',()=>{const key=b.dataset.screen;document.querySelector('.selected-screen').src='assets/'+key+'.webp';document.querySelector('.selected-screen').alt=works.find(p=>p.key===key).title+' - интерфейс проекта';document.querySelector('.hero-stage [data-work]').dataset.work=key;document.querySelectorAll('[data-screen]').forEach(t=>t.setAttribute('aria-selected',String(t===b)))}));
 
 const certDialog=document.querySelector('.cert-viewer');
-document.querySelectorAll('[data-cert]').forEach(b=>b.addEventListener('click',()=>{certDialog.querySelector('h2').textContent=b.dataset.title;certDialog.querySelector('img').src='assets/'+b.dataset.cert;certDialog.querySelector('img').alt=b.dataset.title+' - сертификат';showPanel(certDialog)}));
+document.querySelectorAll('[data-cert]').forEach(b=>b.addEventListener('click',async()=>{
+ const request=++panelRequest,src='assets/'+b.dataset.cert;
+ try{
+  const prepared=await preparePanelImage(src);if(request!==panelRequest)return;
+  certDialog.querySelector('h2').textContent=b.dataset.title;
+  const image=certDialog.querySelector('img');image.src=src;image.alt=b.dataset.title+' - сертификат';
+  await image.decode();if(request!==panelRequest)return;
+  certDialog.dataset.mediaRatio=prepared.naturalWidth/prepared.naturalHeight;showPanel(certDialog);
+ }catch(error){console.error('Certificate preview could not load',error);}
+}));
 certDialog.querySelector('.close').addEventListener('click',()=>hidePanel(certDialog));
 certDialog.addEventListener('click',e=>{if(e.target===certDialog)hidePanel(certDialog)});
 document.querySelectorAll('[data-screen]').forEach(b=>b.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){const tabs=[...document.querySelectorAll('[data-screen]')];const next=tabs[(tabs.indexOf(b)+(e.key==='ArrowRight'?1:tabs.length-1))%tabs.length];next.focus();next.click();e.preventDefault()}}));
 const motionEnabled=()=>!window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 document.querySelectorAll('[data-screen]').forEach(b=>b.addEventListener('click',()=>{if(motionEnabled())document.querySelector('.selected-screen').animate([{opacity:.65,transform:'translateY(5px)'},{opacity:1,transform:'none'}],{duration:220,easing:'ease-out'})}));
-document.querySelectorAll('[data-work],[data-cert]').forEach(b=>b.addEventListener('click',()=>{if(motionEnabled())(b.hasAttribute('data-cert')?certDialog:dialog).animate([{opacity:.65},{opacity:1}],{duration:220,easing:'ease-out'})}));
 
 // Decode the artwork before the original entrance; never restart it during scrolling.
 async function enterMobileArtwork(){
@@ -97,3 +144,22 @@ mascotMotion.addEventListener('change',()=>document.querySelectorAll('.bip-previ
 // Keep full-quality gallery media out of the first-screen request queue.
 const deferredMedia=new IntersectionObserver(entries=>{for(const entry of entries){if(!entry.isIntersecting)continue;const el=entry.target;if(el.dataset.srcset){el.srcset=el.dataset.srcset;delete el.dataset.srcset;}if(el.dataset.src){el.src=el.dataset.src;delete el.dataset.src;}if(el.hasAttribute('data-lazy-background'))el.classList.add('media-ready');deferredMedia.unobserve(el);}},{rootMargin:'600px 0px'});
 document.querySelectorAll('img[data-src],[data-lazy-background]').forEach(el=>deferredMedia.observe(el));
+
+// Prepare gallery assets after the first screen, before a visitor opens a preview.
+async function warmViewerMedia(){
+ const idle=()=>new Promise(resolve=>{if('requestIdleCallback' in window)requestIdleCallback(resolve,{timeout:1500});else setTimeout(resolve,50);});
+ const phones=[...document.querySelectorAll('.project-mobile-apps img.device-mockup')];
+ let readyPhones=0;
+ for(const image of phones){
+  await idle();
+  const src=image.dataset.src||image.src;
+  if(!viewerPhoneVectors.has(src))viewerPhoneVectors.set(src,fetch(src,{priority:'low'}).then(response=>{if(!response.ok)throw new Error('Phone preview unavailable');return response.text();}));
+  await viewerPhoneVectors.get(src).then(()=>{panelImageCache.dataset.readyPhones=String(++readyPhones);}).catch(()=>{});
+ }
+ for(const button of document.querySelectorAll('[data-cert]')){
+  await idle();await preparePanelImage('assets/'+button.dataset.cert).catch(()=>{});
+ }
+ await idle();await preparePanelImage('assets/unique-travel-background.webp').catch(()=>{});
+}
+function scheduleViewerWarmup(){setTimeout(()=>{if('requestIdleCallback' in window)requestIdleCallback(warmViewerMedia,{timeout:1500});else warmViewerMedia();},2400);}
+if(document.readyState==='complete')scheduleViewerWarmup();else window.addEventListener('load',scheduleViewerWarmup,{once:true});

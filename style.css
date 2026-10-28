@@ -307,3 +307,18 @@ main{display:block}.services{padding:0 0 100px}.service-list{display:grid;grid-t
 
 @media(max-width:900px){.mobile-intro-pending .atelier .hero-stage img{opacity:0}}
 .mobile-app-cover[data-lazy-background]:not(.media-ready){background-image:none}
+
+/* Fit each preview to its own aspect ratio and the available viewport. */
+body.panel-open::before{content:"";position:fixed;inset:0;z-index:99;background:var(--paper)}
+.viewer,.cert-viewer{top:50%;transform:translateY(-50%);height:auto;max-height:none;overflow:hidden;box-shadow:0 16px 60px #203d321c;border:1px solid var(--line);border-radius:12px}
+.viewer header,.cert-viewer header{position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 16px;min-height:50px;border-bottom:1px solid var(--line)}
+.viewer h2,.cert-viewer h2{font-size:16px;line-height:1.35;font-weight:500;min-width:0}
+.viewer .close,.cert-viewer .close{width:32px;height:32px;flex:0 0 32px;padding:0;display:grid;place-items:center;border-radius:50%;background:var(--panel);line-height:1;font-size:24px}
+.viewer-media{height:var(--viewer-media-height);width:100%;position:relative;overflow:hidden}
+.viewer-media>img:not(.viewer-bip),.viewer-media>.project-video,.cert-viewer>img{display:block;width:100%;height:var(--viewer-media-height);max-height:none;object-fit:contain}
+.viewer-info{padding:12px 16px;display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:18px}
+.viewer-info p{flex:1 1 0;min-width:0;font-size:13px;line-height:1.6;overflow-wrap:anywhere}
+.viewer-info>a{flex:0 0 auto;white-space:nowrap;padding:10px 18px}
+.viewer-mobile .viewer-phones{height:100%;max-height:none;padding:12px 20px}
+.viewer-mobile .viewer-phones .app-devices{width:min(100cqw,160cqh)}
+@media(max-width:600px){.viewer header,.cert-viewer header{padding:8px 12px;height:56px;min-height:56px}.viewer h2,.cert-viewer h2{font-size:14px;line-height:1.4}.viewer-info{padding:10px 12px;gap:12px}.viewer-info p{font-size:12px}.viewer-info>a{padding:9px 12px;font-size:11px}.viewer-mobile .viewer-phones{padding:10px 12px}}

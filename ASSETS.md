@@ -35,6 +35,10 @@ Only empty login screens from the author-developed tourist and guide application
 The Chinese landscape behind the mobile previews was generated with built-in imagegen, selected variant 2 (ink wash). All three PNG options and exact prompts are in outputs/portfolio-refresh-2026-10-27/background-options/. Self-contained SVG device frames embed the exact original lossless 1170x2532 screenshots. The iPhone and Android are rotated -5 and +5 degrees inside SVG, never by rotating a CSS raster layer. Original logo width 170 logical CSS px and RU/EN font 11 logical CSS px remain unchanged. Only the guide header is moved down 16 logical CSS px (the last adjustment adds 4 px), with form geometry preserved. Hover scales the shared device composition.
 
 
+## Project screenshot framing, 2026-10-29
+
+The original PNG screenshots for Docledger, Roam CRM, Echo Studio, Threadflow, Supply and Framecraft included empty capture margins on the right and bottom. Only these outer margins were removed. Retained PNG pixels are verified identical to their original region; UI content is not regenerated or stretched. Matching PNG previews are stored in each project's `docs/preview.png`. Portfolio masters are lossless WebP, with regenerated 480/800/1200 pixel derivatives. Original backups and exact dimensions are recorded in `outputs/portfolio-refresh-2026-10-29/screenshot-framing/results.json` in the task workspace.
+
 ## Font delivery
 
 The used Manrope weights and Prata are subset to the characters used across the portfolio and its service pages, including full basic Latin and Russian alphabets. Original glyph outlines, advance widths, hinting and layout features are preserved and verified. The original SIL Open Font Licenses remain in FONT_LICENSES.txt. Unused glyphs are removed; typefaces and typography are unchanged.
