@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" fill="none">
+  <defs>
+    <linearGradient id="paper" x1="800" y1="0" x2="800" y2="1000" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#e7e9dd"/><stop offset=".6" stop-color="#e2e7dd"/><stop offset="1" stop-color="#cbd9cf"/>
+    </linearGradient>
+    <linearGradient id="mist" x1="800" y1="360" x2="800" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ecede2" stop-opacity="0"/><stop offset=".58" stop-color="#ecede2" stop-opacity=".88"/><stop offset="1" stop-color="#ecede2" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="water" x1="800" y1="690" x2="800" y2="1000" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#d6e0d5" stop-opacity="0"/><stop offset="1" stop-color="#aebfb3" stop-opacity=".45"/>
+    </linearGradient>
+  </defs>
+  <path fill="url(#paper)" d="M0 0h1600v1000H0z"/>
+  <circle cx="260" cy="182" r="53" fill="#bb9b65" opacity=".32"/>
+  <path d="M0 480 61 387 97 420 146 271 174 250 212 345 251 298 296 412 337 361 384 462 425 418 476 558 528 499 581 601 642 553 705 709H0Z" fill="#a8bcb0" opacity=".6"/>
+  <path d="m1600 402-62-71-40 36-59-165-32-31-48 144-27-37-56 124-52-82-44 164-35-31-58 131-51-53-43 101-42-50-92 139h841Z" fill="#a9bbb0" opacity=".62"/>
+  <path d="m0 706 42-52 37-142 35-48 20 24 30-86 23 34 23 142 35-33 23 129 38-32 64 146 40-40 66 104H0Z" fill="#718e80" opacity=".56"/>
+  <path d="m1600 689-44-94-35-32-35 46-28-143-27-52-24 34-17 139-41-54-30 137-42-39-43 100-35-24-83 129h584Z" fill="#678679" opacity=".6"/>
+  <path d="m80 514 12 113m69-165 12 139m1262-132-8 116m49 17 20 81" stroke="#e7ece2" stroke-width="3" stroke-linecap="round" opacity=".48"/>
+  <path fill="url(#mist)" d="M0 310h1600v600H0z"/>
+  <path d="M0 813q280-42 570-3t530-9 500-14v213H0Z" fill="url(#water)"/>
+  <g stroke="#819d8d" stroke-linecap="round" opacity=".28">
+    <path d="M330 846q106-9 217 0m-188 21q65-5 116 0m625-25q96-7 187 0m-155 25q61-4 109 0M595 927q132-8 268 0m-210 22q77-5 145 0" stroke-width="2"/>
+    <path d="M80 964q74-27 128-22m1188 29q67-12 124-42" stroke-width="3"/>
+  </g>
+  <g stroke="#456a56" stroke-linecap="round" opacity=".48">
+    <path d="M0 1000q90-102 131-223m-43 109q-34-4-60-29m79-12q48-10 80-42m-66 1q-14-37-10-68m-40 172q-3-35-26-63" stroke-width="4"/>
+    <path d="m136 788 17-47m-12 89 45-37m-65 51-25-47m-18 81-44-28m145-41 35-15" stroke-width="7"/>
+  </g>
+</svg>

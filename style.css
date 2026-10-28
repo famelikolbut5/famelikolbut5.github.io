@@ -216,3 +216,89 @@ main{display:block}.services{padding:0 0 100px}.service-list{display:grid;grid-t
 
 .atelier .contact{--muted:#c5ccbf}
 @media(prefers-reduced-motion:reduce){.atelier .hero h1{animation:none!important}}
+
+
+/* October portfolio update: client site, CRM and Supply in the original collage. */
+.atelier .hero-stage{height:590px}
+.atelier .hero-project{display:block;padding:6px;background:#fffdf7;border-radius:8px;overflow:hidden;text-align:left}
+.atelier .hero-project>img,.atelier .hero-project .crm-screen>img:not(.bip-preview){border:0;border-radius:3px;box-shadow:none;width:100%;height:auto}
+.atelier .side-shot{width:85%;left:0;top:0;z-index:1}
+.atelier .main-shot{width:96%;right:-10px;top:175px;z-index:2}
+.atelier .small-shot{width:62%;right:-12px;bottom:0;z-index:3}
+.hero-project-caption{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:7px 6px 2px;font-size:11px;font-weight:600;line-height:1.4}
+.hero-project-caption>span{font-size:10px;font-weight:400;color:var(--muted)}
+.hero-project:focus-visible{outline-offset:7px}.hero-project:hover{filter:brightness(1.025)}
+.crm-screen{position:relative;display:block;width:100%;overflow:hidden;border-radius:3px}
+.crm-screen .bip-preview{position:absolute;left:-.78125%;top:47.387%;width:18.75%;height:auto;border:0!important;border-radius:0!important;box-shadow:none!important}
+.project-kind{display:block;font-size:12px;color:var(--muted);margin-top:18px}
+.project-kind+.project-heading{margin-top:5px}
+.atelier .dental-cover{background:#ded9ca;padding:18px}
+.atelier .crm-cover{position:relative;background:#e0e6d9;padding:18px}
+.work-image .crm-screen>img:not(.bip-preview){aspect-ratio:16/9;object-fit:cover}
+.work-image .bip-preview{aspect-ratio:auto;object-fit:contain}
+.motion-caption{display:inline-block;font-size:11px;line-height:1.5;padding-top:12px;color:#365242}
+.project-text-link{padding:0;font-size:12px;color:var(--muted);border-bottom:1px solid var(--line);white-space:nowrap}
+.viewer-info>a[hidden]{display:none}.viewer-crm{position:fixed}
+.viewer-crm>.viewer-bip{position:absolute;left:-.78125%;top:calc(77px + 47.387% - 36px);width:18.75%;height:auto;pointer-events:none}
+.viewer-crm>img:not(.viewer-bip){position:relative}
+.viewer-bip[hidden]{display:none!important}
+@media(min-width:1100px){.atelier .hero{min-height:700px}.atelier .hero-stage{height:590px}.atelier .side-shot{width:85%;left:0;top:0}.atelier .main-shot{width:96%;right:-10px;top:175px}.atelier .small-shot{width:62%;right:-12px;bottom:0}}
+@media(max-width:1099px) and (min-width:901px){.atelier .hero-stage{height:500px}.atelier .main-shot{top:145px}.hero-project-caption{font-size:10px}.hero-project-caption>span{font-size:9px}}
+@media(max-width:900px){.atelier .hero-stage{height:590px;margin-top:25px;max-width:650px}.atelier .main-shot{top:175px}.atelier .small-shot{right:0}.atelier .hero-project{box-shadow:0 12px 28px #3e453520}}
+@media(max-width:600px){.atelier .hero-stage{height:410px;margin-top:24px}.atelier .side-shot{width:88%;left:0}.atelier .main-shot{width:96%;top:112px;right:0}.atelier .small-shot{width:62%;right:0;bottom:0}.atelier .hero-project{padding:4px}.hero-project-caption{padding:5px 3px 1px;font-size:9px}.hero-project-caption>span{font-size:8px}.atelier .dental-cover,.atelier .crm-cover{padding:12px}.project-kind{margin-top:14px}.project-agency-crm .project-heading{align-items:flex-start;gap:12px}.project-text-link{white-space:normal;text-align:right;font-size:11px;max-width:105px}.motion-caption{padding-top:8px;font-size:10px}}
+@media(max-width:360px){.atelier .hero-stage{height:360px}.atelier .main-shot{top:100px}.hero-project-caption>span{display:none}}
+
+/* Keep the CRM click target clear of the foreground Supply card. */
+@media(min-width:901px){.atelier .small-shot{width:51%;right:-15px;bottom:-40px}}
+@media(min-width:601px) and (max-width:900px){.atelier .small-shot{width:56%;bottom:-50px}}
+.viewer-media{position:relative;overflow:hidden}.viewer-media>img:not(.viewer-bip){display:block;width:100%;height:auto}.viewer-media>img[hidden]{display:none!important}
+.viewer-crm .viewer-media>.viewer-bip{position:absolute;left:-.78125%;top:47.387%;width:18.75%;height:auto;pointer-events:none;border:0}
+
+.dental-cover>img{aspect-ratio:16/9;object-fit:cover}.project-preview-caption{display:inline-block;font-size:11px;line-height:1.5;padding-top:12px;color:#365242}@media(max-width:600px){.project-preview-caption{padding-top:8px;font-size:10px}}
+
+/* The CRM screen and its mascot share one transform, so hover cannot separate them. */
+.crm-screen{transition:transform .4s}
+.work-image.crm-cover:hover img{transform:none}
+.work-image.crm-cover:hover .crm-screen{transform:scale(1.025)}
+.work-image .bip-preview{transition:none}
+.hero-project-caption,.project-kind,.project-preview-caption,.motion-caption{display:none}
+.mobile-service{grid-column:1/-1;max-width:none}.mobile-service p{max-width:70ch}
+@media(hover:none),(prefers-reduced-motion:reduce){.work-image.crm-cover:hover .crm-screen{transform:none}}
+@media(max-width:600px){.mobile-service{grid-column:auto}}
+
+
+
+/* Full-scene loop includes the help window and both mascot anchor positions. */
+.crm-screen .bip-preview,.viewer-crm .viewer-media>.viewer-bip{position:absolute;inset:0;left:0;top:0;width:100%;height:100%;aspect-ratio:16/9;object-fit:contain;pointer-events:none}
+.atelier nav{border-bottom:1px solid var(--line)}
+
+
+
+/* Original 3x screens embedded in self-contained SVG devices. Rotation lives inside SVG, not on a CSS raster layer. */
+.project-mobile-apps .mobile-app-cover{position:relative;display:block;height:auto;aspect-ratio:auto;padding:22px;overflow:hidden}
+.mobile-app-cover::before{content:"";display:block;padding-top:62.5%}
+.app-devices{position:relative;display:block;width:100%;height:100%}
+.mobile-app-cover .app-devices{position:absolute;inset:22px;width:auto;height:auto;transition:transform .4s cubic-bezier(.2,.65,.3,1)}
+.app-phone{position:absolute;display:block;aspect-ratio:520/944;overflow:visible;transform:none;border:0;border-radius:0;background:none;box-shadow:none}
+.app-phone-guide{height:91%;left:24%;top:6%;z-index:2}
+.app-phone-tourist{height:84%;left:50%;top:2%;z-index:1}
+.work-image .app-phone>img.device-mockup,.viewer-phones .app-phone>img.device-mockup,.service-app-example .app-phone>img.device-mockup{display:block;width:100%;height:100%;max-width:none;aspect-ratio:520/944;object-fit:contain;margin:0;border:0;border-radius:0;box-shadow:none;filter:none;transform:none!important;transition:none!important}
+.viewer-phones .app-phone>svg.device-mockup{display:block;width:100%;height:100%;max-width:none;overflow:visible;transform:none}
+.app-phone .bird-preview{position:absolute;left:36.87%;top:14.74%;width:32.4%;height:auto;max-width:none;aspect-ratio:430/320;object-fit:contain;margin:0;border:0;border-radius:0;filter:brightness(1.9) contrast(1.08);transform:none!important;transition:none;pointer-events:none}
+.app-phone-guide .bird-preview{left:36.87%;top:14.74%;transform:rotate(-5deg)!important;transform-origin:0 0}
+.app-phone-tourist .bird-preview{left:48.19%;top:14.01%;transform:rotate(5deg)!important;transform-origin:0 0}
+.atelier .mobile-app-cover:hover .app-devices{transform:scale(1.045)}
+.viewer-phones{height:min(65vh,620px);padding:30px 40px;display:grid;grid-template:minmax(0,1fr)/minmax(0,1fr);place-items:center;container-type:size}
+.viewer-phones[hidden]{display:none!important}
+.service-app-example{height:390px;max-width:100%;padding:24px;margin:0 0 24px;border-radius:8px;overflow:hidden;display:grid;grid-template:minmax(0,1fr)/minmax(0,1fr);place-items:center;container-type:size}
+.viewer-phones .app-devices,.service-app-example .app-devices{width:min(140cqw,160cqh);height:auto;aspect-ratio:8/5;max-width:none;margin:0;place-self:center}
+.project-mobile-apps .mobile-app-cover,.viewer-phones,.service-app-example,.atelier .project-mobile-apps .mobile-app-cover:hover{background:#ede8db url("assets/unique-travel-background.webp") center/cover no-repeat}
+@media(max-width:600px){
+ .project-mobile-apps .mobile-app-cover{padding:13px}
+ .mobile-app-cover .app-devices{inset:13px}
+ .viewer-phones{height:min(58vh,80vw);padding:18px 14px}
+ .service-app-example{height:75vw;padding:18px}
+}
+@media(prefers-reduced-motion:reduce){.mobile-app-cover .app-devices{transition:none}.atelier .mobile-app-cover:hover .app-devices{transform:none}}
+.viewer-mobile .viewer-phones{height:calc(90dvh - 160px);max-height:780px;min-height:0;padding:12px 24px}
+@media(max-width:600px){.viewer-mobile .viewer-phones{height:calc(90dvh - 190px);padding:10px 14px}.viewer-mobile .viewer-phones .app-devices{width:min(190cqw,160cqh)}}
