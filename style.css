@@ -125,7 +125,7 @@
 
 .course-list{grid-template-columns:repeat(5,1fr)}@media(max-width:900px){.course-list{grid-template-columns:repeat(2,1fr)}}
 
-.viewer,.cert-viewer{position:fixed;z-index:100;top:5vh;left:0;right:0;margin:0 auto;max-height:90vh;box-shadow:0 0 0 100vmax var(--paper)}
+.viewer,.cert-viewer{position:fixed;z-index:100;top:5vh;left:0;right:0;margin:0 auto;max-height:90vh;box-shadow:0 0 0 100vmax #10131bcb}
 .viewer[hidden],.cert-viewer[hidden]{display:none!important}.viewer>img{max-height:65vh;object-fit:contain}
 .viewer header,.cert-viewer header{position:sticky;top:0;background:var(--paper);z-index:1}
 
