@@ -88,7 +88,7 @@ certDialog.addEventListener('click',e=>{if(e.target===certDialog)hidePanel(certD
 document.querySelectorAll('[data-screen]').forEach(b=>b.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){const tabs=[...document.querySelectorAll('[data-screen]')];const next=tabs[(tabs.indexOf(b)+(e.key==='ArrowRight'?1:tabs.length-1))%tabs.length];next.focus();next.click();e.preventDefault()}}));
 const motionEnabled=()=>!window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 document.querySelectorAll('[data-screen]').forEach(b=>b.addEventListener('click',()=>{if(motionEnabled())document.querySelector('.selected-screen').animate([{opacity:.65,transform:'translateY(5px)'},{opacity:1,transform:'none'}],{duration:220,easing:'ease-out'})}));
-document.querySelectorAll('[data-work],[data-cert]').forEach(b=>b.addEventListener('click',()=>{if(motionEnabled())(b.hasAttribute('data-cert')?certDialog:dialog).animate([{opacity:.65},{opacity:1}],{duration:220,easing:'ease-out'})}));
+document.querySelectorAll('[data-cert]').forEach(b=>b.addEventListener('click',()=>{if(motionEnabled())certDialog.animate([{opacity:.65},{opacity:1}],{duration:220,easing:'ease-out'})}));
 
 // Decode the artwork before the original entrance; never restart it during scrolling.
 async function enterMobileArtwork(){
