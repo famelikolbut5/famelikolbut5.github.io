@@ -129,15 +129,6 @@
 .viewer[hidden],.cert-viewer[hidden]{display:none!important}.viewer>img{max-height:65vh;object-fit:contain}
 .viewer header,.cert-viewer header{position:sticky;top:0;background:var(--paper);z-index:1}
 
-/* Keep every project and certificate inside one viewport, without an internal scroll. */
-.viewer,.cert-viewer{height:90dvh;overflow:hidden;display:flex;flex-direction:column}
-.viewer header,.cert-viewer header{padding:14px 20px;flex:0 0 auto}
-.viewer h2{font-size:18px}.cert-viewer h2{font-size:16px}
-.viewer-media{flex:1 1 auto;min-height:0;display:grid;place-items:center}
-.viewer-media>img:not(.viewer-bip),.project-video{width:100%;height:100%;max-height:none;object-fit:contain}
-.viewer-phones,.viewer-mobile .viewer-phones{height:100%;max-height:none;min-height:0;flex:1 1 auto}
-.cert-viewer>img{flex:1 1 auto;min-height:0;width:100%;height:100%;max-height:none;object-fit:contain}
-
 /* Atelier: one composed entrance, not repeating section effects. */
 .atelier .lettermark{font:400 34px/1 'Prata',serif;letter-spacing:-3px;padding-right:4px}
 .atelier .hero{animation:none}
