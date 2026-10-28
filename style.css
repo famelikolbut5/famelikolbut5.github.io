@@ -3,35 +3,35 @@
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url(assets/font-0.woff2) format('woff2');
+  src: url(assets/font-0.woff2?v=0d569e9df2a9) format('woff2');
 }
 @font-face {
   font-family: 'Manrope';
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: url(assets/font-1.woff2) format('woff2');
+  src: url(assets/font-1.woff2?v=2b5387e6212d) format('woff2');
 }
 @font-face {
   font-family: 'Manrope';
   font-style: normal;
   font-weight: 600;
   font-display: swap;
-  src: url(assets/font-2.woff2) format('woff2');
+  src: url(assets/font-2.woff2?v=1e7b8f41f8db) format('woff2');
 }
 @font-face {
   font-family: 'Manrope';
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: url(assets/font-3.woff2) format('woff2');
+  src: url(assets/font-3.woff2?v=323b3760ef78) format('woff2');
 }
 @font-face {
   font-family: 'Manrope';
   font-style: normal;
   font-weight: 800;
   font-display: swap;
-  src: url(assets/font-4.woff2) format('woff2');
+  src: url(assets/font-4.woff2?v=cb3cba88b1c6) format('woff2');
 }
 @font-face {
   font-family: 'Onest';
@@ -73,7 +73,7 @@
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url(assets/font-10.woff2) format('woff2');
+  src: url(assets/font-10.woff2?v=0d48bd5856c9) format('woff2');
 }
 @font-face {
   font-family: 'Unbounded';
@@ -169,7 +169,7 @@ html{overflow-x:hidden}
   .atelier .main-shot{transform:rotate(-3deg)}
   .atelier .small-shot{transform:rotate(4deg)}
 
-  .mobile-intro-pending .atelier .hero-stage img{opacity:0}
+
 
   .mobile-intro-ready .atelier .side-shot{animation:atelier-top 1100ms cubic-bezier(.16,1,.3,1) 120ms both}
   .mobile-intro-ready .atelier .main-shot{animation:atelier-main 1100ms cubic-bezier(.16,1,.3,1) 300ms both}
@@ -186,7 +186,7 @@ html{overflow-x:hidden}
 /* Garden: recorded interactive demo. The landing loads video only on request. */
 .project-garden{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1.6fr) minmax(260px,1fr);gap:42px;align-items:center;padding-top:12px}
 .atelier .garden-cover{position:relative;isolation:isolate;padding:22px;background:#302c42;border-radius:14px;aspect-ratio:1.6}
-.garden-cover-backdrop{position:absolute;inset:-24px;background:url('assets/garden.jpg') center/cover;filter:blur(18px) brightness(.65);z-index:-1}
+.garden-cover-backdrop{position:absolute;inset:-24px;background:url('assets/garden-800.webp') center/cover;filter:blur(18px) brightness(.65);z-index:-1}
 .garden-cover img{display:block;position:relative;aspect-ratio:auto;border-radius:7px;box-shadow:0 12px 28px #100c2940}
 .garden-play{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:flex;align-items:center;gap:9px;white-space:nowrap;border:1px solid #ffffff40;background:#fffaf1;color:#352d43;border-radius:30px;padding:9px 15px;font-size:12px;box-shadow:0 4px 20px #100c2930}
 .garden-category{color:var(--accent);font-size:12px}.project-garden .project-heading{margin-top:9px;gap:20px}.project-garden h3{font-size:34px}.project-garden p{max-width:420px}.garden-video-note{display:block;font-size:11px;color:var(--muted);margin-top:22px}
@@ -268,8 +268,10 @@ main{display:block}.services{padding:0 0 100px}.service-list{display:grid;grid-t
 
 
 
-/* Full-scene loop includes the help window and both mascot anchor positions. */
-.crm-screen .bip-preview,.viewer-crm .viewer-media>.viewer-bip{position:absolute;inset:0;left:0;top:0;width:100%;height:100%;aspect-ratio:16/9;object-fit:contain;pointer-events:none}
+/* Only transparent margins are removed; all animation pixels and timing are preserved. */
+.crm-screen .bip-frame,.viewer-media>.viewer-bip-frame{position:absolute;inset:auto;left:1.484375%;top:20%;width:43.984375%;height:77.2222222222%;overflow:hidden;pointer-events:none}
+.bip-frame[hidden]{display:none!important}
+.crm-screen .bip-frame>.bip-preview,.viewer-bip-frame>.viewer-bip{position:absolute;inset:auto;left:-3.3747779751%;top:-25.8992805755%;width:227.3534635879%;max-width:none;height:auto;aspect-ratio:16/9;object-fit:contain;pointer-events:none;border:0!important;box-shadow:none!important}
 .atelier nav{border-bottom:1px solid var(--line)}
 
 
@@ -302,3 +304,6 @@ main{display:block}.services{padding:0 0 100px}.service-list{display:grid;grid-t
 @media(prefers-reduced-motion:reduce){.mobile-app-cover .app-devices{transition:none}.atelier .mobile-app-cover:hover .app-devices{transform:none}}
 .viewer-mobile .viewer-phones{height:calc(90dvh - 160px);max-height:780px;min-height:0;padding:12px 24px}
 @media(max-width:600px){.viewer-mobile .viewer-phones{height:calc(90dvh - 190px);padding:10px 14px}.viewer-mobile .viewer-phones .app-devices{width:min(190cqw,160cqh)}}
+
+@media(max-width:900px){.mobile-intro-pending .atelier .hero-stage img{opacity:0}}
+.mobile-app-cover[data-lazy-background]:not(.media-ready){background-image:none}

@@ -1,0 +1,16 @@
+# Артур Колесников
+
+> Разработка сайтов, веб- и мобильных приложений, CRM, ботов и автоматизаций. Портфолио самостоятельного разработчика.
+
+## Услуги
+
+- [Сайты, лендинги и веб-приложения](https://arturkolesnikov.online/services/web-development/)
+- [Автоматизация и AI-интеграции](https://arturkolesnikov.online/services/automation/)
+- [Приложения и формы для Битрикс24](https://arturkolesnikov.online/services/bitrix24/)
+- [Боты и Mini Apps для Telegram и MAX](https://arturkolesnikov.online/services/telegram-bots/)
+- [Разработка приложений для iOS и Android](https://arturkolesnikov.online/services/mobile-apps/)
+
+## Портфолио и связь
+
+- [Примеры работ](https://arturkolesnikov.online/#work)
+- [Контакты](https://arturkolesnikov.online/#contact)

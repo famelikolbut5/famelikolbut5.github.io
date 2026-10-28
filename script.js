@@ -15,7 +15,7 @@ const dialog=document.querySelector('.viewer');
 const viewerPhoneVectors=new Map();
 function renderViewerPhoneVectors(root){
  root.querySelectorAll('img.device-mockup').forEach((image,index)=>{
-  const source=image.src;
+  const source=image.dataset.src||image.src;
   if(!viewerPhoneVectors.has(source))viewerPhoneVectors.set(source,fetch(source).then(response=>{if(!response.ok)throw new Error('Phone preview unavailable');return response.text();}));
   viewerPhoneVectors.get(source).then(text=>{
    if(!image.isConnected)return;
@@ -46,8 +46,8 @@ function openWork(key,animateMascot=true){
  if(phones)phones.hidden=!p.phones;
  if(p.phones)renderViewerPhoneVectors(phones);
  let mascot=dialog.querySelector('.viewer-bip');
- if(hasMascot&&!mascot){mascot=document.createElement('img');mascot.className='viewer-bip bip-preview';mascot.alt='';mascot.width=1280;mascot.height=720;mascot.dataset.animation='assets/bip-preview.webp?v=f96472ee8164';mascot.src='assets/bip-still.webp?v=73e628c5a980';dialog.querySelector('.viewer-media').append(mascot);observeMascot(mascot);}
- if(mascot)mascot.hidden=!hasMascot;
+ if(hasMascot&&!mascot){mascot=document.createElement('img');mascot.className='viewer-bip bip-preview';mascot.alt='';mascot.width=1280;mascot.height=720;mascot.fetchPriority='low';mascot.dataset.animation='assets/bip-preview.webp?v=f96472ee8164';mascot.src='assets/bip-still.webp?v=73e628c5a980';const frame=document.createElement('span');frame.className='bip-frame viewer-bip-frame';frame.append(mascot);dialog.querySelector('.viewer-media').append(frame);observeMascot(mascot);}
+ if(mascot){mascot.hidden=!hasMascot;mascot.parentElement.hidden=!hasMascot;}
  if(p.video){
   video.poster=p.image;video.src=p.video;video.muted=false;video.volume=1;
  }else if(!p.phones){image.src=p.mascot&&!hasMascot?'assets/agency-crm.webp?v=bda868b1c8a6':p.image||'assets/'+key+'.webp';image.alt=p.title+' | интерфейс проекта';}
@@ -76,7 +76,7 @@ async function enterMobileArtwork(){
   if(!stage)return;
   if(window.matchMedia('(max-width:900px)').matches&&motionEnabled())root.classList.add('mobile-intro-pending');
   const initialScroll=window.scrollY;
-  const images=[...stage.querySelectorAll('img')];
+  const images=[...stage.querySelectorAll('img:not(.bip-preview)')];
   await Promise.all(images.map(img=>img.decode().catch(()=>{})));
   const bounds=stage.getBoundingClientRect();
   const canAnimate=root.classList.contains('mobile-intro-pending')&&images.every(img=>img.naturalWidth>0)&&Math.abs(window.scrollY-initialScroll)<24&&bounds.top<window.innerHeight&&bounds.bottom>0&&document.visibilityState==='visible'&&motionEnabled()&&window.matchMedia('(max-width:900px)').matches;
@@ -93,3 +93,7 @@ const mascotObserver=new IntersectionObserver(entries=>{for(const entry of entri
 function observeMascot(el){mascotObserver.observe(el);}
 document.querySelectorAll('.bip-preview,.bird-preview').forEach(observeMascot);
 mascotMotion.addEventListener('change',()=>document.querySelectorAll('.bip-preview,.bird-preview').forEach(el=>{el.src=el.dataset.still||'assets/bip-still.webp?v=73e628c5a980';mascotObserver.unobserve(el);mascotObserver.observe(el);}));
+
+// Keep full-quality gallery media out of the first-screen request queue.
+const deferredMedia=new IntersectionObserver(entries=>{for(const entry of entries){if(!entry.isIntersecting)continue;const el=entry.target;if(el.dataset.srcset){el.srcset=el.dataset.srcset;delete el.dataset.srcset;}if(el.dataset.src){el.src=el.dataset.src;delete el.dataset.src;}if(el.hasAttribute('data-lazy-background'))el.classList.add('media-ready');deferredMedia.unobserve(el);}},{rootMargin:'600px 0px'});
+document.querySelectorAll('img[data-src],[data-lazy-background]').forEach(el=>deferredMedia.observe(el));
