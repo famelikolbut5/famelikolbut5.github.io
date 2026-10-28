@@ -13,11 +13,13 @@ works.unshift(
 
 const dialog=document.querySelector('.viewer');
 const viewerPhoneVectors=new Map();
+let viewerImageRequest=0;
+const viewerImageRequests=new Map();
 function renderViewerPhoneVectors(root){
  root.querySelectorAll('img.device-mockup').forEach((image,index)=>{
   const source=image.dataset.src||image.src;
-  if(!viewerPhoneVectors.has(source))viewerPhoneVectors.set(source,fetch(source).then(response=>{if(!response.ok)throw new Error('Phone preview unavailable');return response.text();}));
-  viewerPhoneVectors.get(source).then(text=>{
+  if(!viewerPhoneVectors.has(source))viewerPhoneVectors.set(source,fetch(source,{priority:'low'}).then(response=>{if(!response.ok)throw new Error('Phone preview unavailable');return response.blob();}));
+  viewerPhoneVectors.get(source).then(data=>data instanceof Blob?data.text():data).then(text=>{
    if(!image.isConnected)return;
    const prefix='viewer-phone-'+index+'-';
    text=text.replace(/id="([^"]+)"/g,(_,id)=>'id="'+prefix+id+'"').replace(/url\(#([^)]+)\)/g,(_,id)=>'url(#'+prefix+id+')');
@@ -32,8 +34,9 @@ function openWork(key,animateMascot=true){
  const p=works.find(p=>p.key===key);if(!p)return;
  const hasMascot=!!p.mascot&&animateMascot;
  const image=dialog.querySelector('img'),video=dialog.querySelector('video');
+ const imageRequest=++viewerImageRequest;
  dialog.querySelector('h2').textContent=p.title;
- image.hidden=!!p.video||!!p.phones;video.hidden=!p.video;
+ image.hidden=true;video.hidden=!p.video;
  dialog.querySelector('.viewer-info p').textContent=p.desc;
  const link=dialog.querySelector('.viewer-info>a');
  link.hidden=!!p.private&&!p.site;
@@ -50,7 +53,11 @@ function openWork(key,animateMascot=true){
  if(mascot){mascot.hidden=!hasMascot;mascot.parentElement.hidden=!hasMascot;}
  if(p.video){
   video.poster=p.image;video.src=p.video;video.muted=false;video.volume=1;
- }else if(!p.phones){image.src=p.mascot&&!hasMascot?'assets/agency-crm.webp?v=bda868b1c8a6':p.image||'assets/'+key+'.webp';image.alt=p.title+' | интерфейс проекта';}
+ }else if(!p.phones){
+  image.alt=p.title+' | интерфейс проекта';
+  image.src=p.mascot&&!hasMascot?'assets/agency-crm.webp?v=bda868b1c8a6':p.image||'assets/'+key+'.webp';
+  image.decode().then(()=>{if(imageRequest===viewerImageRequest)image.hidden=false;}).catch(()=>{if(imageRequest===viewerImageRequest)image.hidden=true;});
+ }
  showPanel(dialog);
  if(p.phones)dialog.scrollTop=0;
  if(p.video)video.play().catch(()=>{/* Native controls remain available if playback is blocked. */});
@@ -58,6 +65,38 @@ function openWork(key,animateMascot=true){
 
 document.querySelectorAll('[data-work]').forEach(b=>b.addEventListener('click',()=>openWork(b.dataset.work,b.dataset.static!=='true')));
 dialog.querySelector('.close').addEventListener('click',()=>hidePanel(dialog));dialog.addEventListener('click',e=>{if(e.target===dialog)hidePanel(dialog)});
+function preloadProjectViewerAssets(){
+ const imageUrls=new Set(),phoneUrls=new Set();
+ for(const project of works){
+  if(project.phones){continue;}
+  const src=project.video?project.image:project.mascot?'assets/agency-crm-motion.webp':project.image||'assets/'+project.key+'.webp';
+  if(src)imageUrls.add(src);
+  if(project.mascot)imageUrls.add('assets/agency-crm.webp?v=bda868b1c8a6');
+ }
+ const preloadImage=(src,srcset='',sizes='')=>{
+  const key=srcset||src;
+  if(!key||viewerImageRequests.has(key))return;
+  const image=new Image();image.fetchPriority='low';image.decoding='async';
+  if(srcset){image.sizes=sizes;image.srcset=srcset;}
+  if(src)image.src=src;
+  viewerImageRequests.set(key,image.decode().then(()=>image).catch(()=>{viewerImageRequests.delete(key);return null;}));
+ };
+ document.querySelectorAll('.project-grid img[data-src]:not(.device-mockup)').forEach(image=>{
+  const src=image.dataset.src,srcset=image.dataset.srcset,sizes=image.sizes;
+  image.fetchPriority='low';image.decoding='async';image.loading='eager';
+  if(srcset){image.srcset=srcset;delete image.dataset.srcset;}
+  if(src){image.src=src;delete image.dataset.src;}
+  const key=srcset||src||image.currentSrc||image.src;
+  if(key&&!viewerImageRequests.has(key))viewerImageRequests.set(key,image.decode().then(()=>image).catch(()=>{viewerImageRequests.delete(key);return null;}));
+ });
+ document.querySelectorAll('.project-mobile-apps .device-mockup').forEach(image=>{const src=image.dataset.src||image.currentSrc||image.src;if(src&&!src.startsWith('data:'))phoneUrls.add(src);});
+ imageUrls.forEach(src=>preloadImage(src));
+ const background=document.querySelector('.mobile-app-cover[data-lazy-background]');
+ if(background){preloadImage('assets/unique-travel-background.webp');viewerImageRequests.get('assets/unique-travel-background.webp')?.then(image=>{if(image)background.classList.add('media-ready');});}
+ phoneUrls.forEach(src=>{if(!viewerPhoneVectors.has(src))viewerPhoneVectors.set(src,fetch(src,{priority:'low'}).then(response=>{if(!response.ok)throw new Error('Phone preview unavailable');return response.blob();}));});
+}
+const scheduleProjectViewerPreloads=()=>{if('requestIdleCallback'in window)requestIdleCallback(preloadProjectViewerAssets,{timeout:5000});else setTimeout(preloadProjectViewerAssets,2400);};
+if(document.readyState==='complete')setTimeout(scheduleProjectViewerPreloads,1800);else window.addEventListener('load',()=>setTimeout(scheduleProjectViewerPreloads,1800),{once:true});
 document.querySelectorAll('[data-screen]').forEach(b=>b.addEventListener('click',()=>{const key=b.dataset.screen;document.querySelector('.selected-screen').src='assets/'+key+'.webp';document.querySelector('.selected-screen').alt=works.find(p=>p.key===key).title+' - интерфейс проекта';document.querySelector('.hero-stage [data-work]').dataset.work=key;document.querySelectorAll('[data-screen]').forEach(t=>t.setAttribute('aria-selected',String(t===b)))}));
 
 const certDialog=document.querySelector('.cert-viewer');
