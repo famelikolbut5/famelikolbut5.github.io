@@ -41,8 +41,8 @@ works.push({key:'garden',title:'Garden',category:'Интерактивное д�
 
 works.unshift(
  {key:'unique-travel',title:'Unique Travel',category:'Приложения для iOS и Android',desc:'Два приложения для туристов и гидов, связанные с CRM.',stack:'React / TypeScript / Capacitor',private:true,phones:true},
- {key:'smile-vityk',title:'SMILE VITYK',category:'Сайт зубного техника',desc:'Сайт зуботехнической лаборатории Ильи Витыка. Галерея работ, 3D-просмотр конструкции и бланк заказа PDF.',stack:'HTML / CSS / JavaScript',image:'assets/smile-vityk.webp',site:'https://smilevityk.by/',private:true},
- {key:'agency-crm',title:'CRM агентства и Бип',category:'Приложение с анимированным помощником',desc:'Анимированный помощник Бип помогает освоить интерфейс, подсказывает действия и показывает нужные разделы.',stack:'React / Node.js / SQLite',image:'assets/agency-crm-motion.webp',private:true,mascot:true}
+ {key:'smile-vityk',title:'SMILE VITYK',category:'Сайт зубного техника',desc:'Сайт зуботехнической лаборатории с галереей работ, 3D-просмотром и бланком заказа в PDF. Для поиска настроены страницы услуг, метатеги и микроразметка.',stack:'HTML / CSS / JavaScript',image:'assets/smile-vityk.webp',site:'https://smilevityk.by/',private:true},
+ {key:'agency-crm',title:'CRM агентства и Бип',staticTitle:'CRM агентства',category:'Приложение с анимированным помощником',desc:'Анимированный помощник Бип помогает освоить интерфейс, подсказывает действия и показывает нужные разделы.',staticDesc:'Заявки и клиенты в одной системе: канбан по этапам, история общения, заметки и планирование следующего контакта.',stack:'React / Node.js / SQLite',image:'assets/agency-crm-motion.webp',private:true,mascot:true}
 );
 
 const dialog=document.querySelector('.viewer');
@@ -87,9 +87,9 @@ async function openWork(key,animateMascot=true){
  if(request!==panelRequest)return;
  const hasMascot=!!p.mascot&&animateMascot;
  let image=dialog.querySelector('.viewer-media>img:not(.viewer-bip)');const video=dialog.querySelector('video');
- dialog.querySelector('h2').textContent=p.title;
+ dialog.querySelector('h2').textContent=animateMascot?p.title:p.staticTitle||p.title;
  image.hidden=!!p.video||!!p.phones;video.hidden=!p.video;
- dialog.querySelector('.viewer-info p').textContent=p.desc;
+ dialog.querySelector('.viewer-info p').textContent=animateMascot?p.desc:p.staticDesc||p.desc;
  const link=dialog.querySelector('.viewer-info>a');
  link.hidden=!!p.private&&!p.site;
  link.href=p.site||(!p.private?'https://github.com/famelikolbut5/'+key:'#');
@@ -104,7 +104,7 @@ async function openWork(key,animateMascot=true){
  if(mascot){mascot.hidden=!hasMascot;mascot.parentElement.hidden=!hasMascot;}
  if(p.video){
   video.poster=p.image;video.src=p.video;video.muted=false;video.volume=1;
- }else if(!p.phones){image=usePreparedImage(dialog,prepared);image.hidden=false;image.alt=p.title+' | интерфейс проекта';}
+ }else if(!p.phones){image=usePreparedImage(dialog,prepared);image.hidden=false;image.alt=dialog.querySelector('h2').textContent+' | интерфейс проекта';}
  dialog.dataset.mediaRatio=p.phones?1.6:p.video?16/9:prepared.naturalWidth/prepared.naturalHeight;
  showPanel(dialog);
  dialog.dataset.openMs=(performance.now()-started).toFixed(1);
