@@ -1,5 +1,6 @@
 let panelInvoker=null, panelRequest=0, panelScroll=0;
 const panelImages=new Map();
+const viewerIdle=()=>new Promise(resolve=>{if('requestIdleCallback' in window)requestIdleCallback(resolve,{timeout:1500});else setTimeout(resolve,50);});
 const panelImageCache=document.createElement('div');panelImageCache.hidden=true;panelImageCache.className='viewer-preload-cache';panelImageCache.setAttribute('aria-hidden','true');document.body.append(panelImageCache);
 function preparePanelImage(src){
  if(!panelImages.has(src)){
@@ -46,11 +47,26 @@ works.unshift(
 
 const dialog=document.querySelector('.viewer');
 const viewerPhoneVectors=new Map();
-function renderViewerPhoneVectors(root){
- return Promise.all([...root.querySelectorAll('img.device-mockup')].map((image,index)=>{
+let viewerPhonesPreparation=null;
+function projectImageSource(project,animateMascot=true){return project.mascot&&!animateMascot?'assets/agency-crm.webp?v=bda868b1c8a6':project.image||'assets/'+project.key+'.webp?v=framed20261029b';}
+function usePreparedImage(panel,prepared){
+ const previous=panel.querySelector('.viewer-media>img:not(.viewer-bip)')||panel.querySelector(':scope>img');
+ if(previous!==prepared){previous.replaceWith(prepared);panelImageCache.append(previous);}
+ return prepared;
+}
+function prepareViewerPhones(){
+ if(viewerPhonesPreparation)return viewerPhonesPreparation;
+ let phones=dialog.querySelector('.viewer-phones');
+ if(!phones){phones=document.createElement('div');phones.className='viewer-phones';phones.hidden=true;phones.innerHTML=document.querySelector('[data-work="unique-travel"] .app-devices').outerHTML;dialog.querySelector('.viewer-media').append(phones);phones.querySelectorAll('.bird-preview').forEach(observeMascot);}
+ viewerPhonesPreparation=renderViewerPhoneVectors(phones).then(()=>{phones.dataset.ready='true';return phones;}).catch(error=>{viewerPhonesPreparation=null;throw error;});
+ return viewerPhonesPreparation;
+}
+async function renderViewerPhoneVectors(root){
+ for(const [index,image] of [...root.querySelectorAll('img.device-mockup')].entries()){
+  await viewerIdle();
   const source=image.dataset.src||image.src;
   if(!viewerPhoneVectors.has(source))viewerPhoneVectors.set(source,fetch(source).then(response=>{if(!response.ok)throw new Error('Phone preview unavailable');return response.text();}));
-  return Promise.all([viewerPhoneVectors.get(source),preparePanelImage(source)]).then(([text])=>{
+  await Promise.all([viewerPhoneVectors.get(source),preparePanelImage(source)]).then(([text])=>{
    if(!image.isConnected)return;
    const prefix='viewer-phone-'+index+'-';
    text=text.replace(/id="([^"]+)"/g,(_,id)=>'id="'+prefix+id+'"').replace(/url\(#([^)]+)\)/g,(_,id)=>'url(#'+prefix+id+')');
@@ -58,18 +74,19 @@ function renderViewerPhoneVectors(root){
    if(svg.localName!=='svg')return;
    svg.setAttribute('class','device-mockup');svg.setAttribute('role','img');svg.setAttribute('aria-label',image.alt);
    image.replaceWith(document.importNode(svg,true));
-  }).catch(()=>{/* The original SVG image remains available as a fallback. */});
- }));
+  });
+ }
 }
 async function openWork(key,animateMascot=true){
+ const started=performance.now();
  const p=works.find(p=>p.key===key);if(!p)return;
  const request=++panelRequest;
- const source=p.mascot&&!animateMascot?'assets/agency-crm.webp?v=bda868b1c8a6':p.image||'assets/'+key+'.webp?v=framed20261029b';
+ const source=projectImageSource(p,animateMascot);
  let prepared;
  try{prepared=await preparePanelImage(p.phones?'assets/unique-travel-background.webp':source);}catch(error){console.error('Project preview could not load',error);return;}
  if(request!==panelRequest)return;
  const hasMascot=!!p.mascot&&animateMascot;
- const image=dialog.querySelector('img'),video=dialog.querySelector('video');
+ let image=dialog.querySelector('.viewer-media>img:not(.viewer-bip)');const video=dialog.querySelector('video');
  dialog.querySelector('h2').textContent=p.title;
  image.hidden=!!p.video||!!p.phones;video.hidden=!p.video;
  dialog.querySelector('.viewer-info p').textContent=p.desc;
@@ -80,17 +97,17 @@ async function openWork(key,animateMascot=true){
  dialog.classList.toggle('viewer-crm',hasMascot);
  dialog.classList.toggle('viewer-mobile',!!p.phones);
  let phones=dialog.querySelector('.viewer-phones');
- if(p.phones&&!phones){phones=document.createElement('div');phones.className='viewer-phones';phones.innerHTML=document.querySelector('[data-work="unique-travel"] .app-devices').outerHTML;dialog.querySelector('.viewer-media').append(phones);phones.querySelectorAll('.bird-preview').forEach(observeMascot);}
+ if(p.phones){phones=await prepareViewerPhones();if(request!==panelRequest)return;}
  if(phones)phones.hidden=!p.phones;
- if(p.phones){await renderViewerPhoneVectors(phones);if(request!==panelRequest)return;}
  let mascot=dialog.querySelector('.viewer-bip');
  if(hasMascot&&!mascot){mascot=document.createElement('img');mascot.className='viewer-bip bip-preview';mascot.alt='';mascot.width=1280;mascot.height=720;mascot.fetchPriority='low';mascot.dataset.animation='assets/bip-preview.webp?v=f96472ee8164';mascot.src='assets/bip-still.webp?v=73e628c5a980';const frame=document.createElement('span');frame.className='bip-frame viewer-bip-frame';frame.append(mascot);dialog.querySelector('.viewer-media').append(frame);observeMascot(mascot);}
  if(mascot){mascot.hidden=!hasMascot;mascot.parentElement.hidden=!hasMascot;}
  if(p.video){
   video.poster=p.image;video.src=p.video;video.muted=false;video.volume=1;
- }else if(!p.phones){image.src=source;image.alt=p.title+' | интерфейс проекта';await image.decode();if(request!==panelRequest)return;}
+ }else if(!p.phones){image=usePreparedImage(dialog,prepared);image.hidden=false;image.alt=p.title+' | интерфейс проекта';}
  dialog.dataset.mediaRatio=p.phones?1.6:p.video?16/9:prepared.naturalWidth/prepared.naturalHeight;
  showPanel(dialog);
+ dialog.dataset.openMs=(performance.now()-started).toFixed(1);
  if(p.phones)dialog.scrollTop=0;
  if(p.video)video.play().catch(()=>{/* Native controls remain available if playback is blocked. */});
 }
@@ -101,13 +118,14 @@ document.querySelectorAll('[data-screen]').forEach(b=>b.addEventListener('click'
 
 const certDialog=document.querySelector('.cert-viewer');
 document.querySelectorAll('[data-cert]').forEach(b=>b.addEventListener('click',async()=>{
+ const started=performance.now();
  const request=++panelRequest,src='assets/'+b.dataset.cert;
  try{
   const prepared=await preparePanelImage(src);if(request!==panelRequest)return;
   certDialog.querySelector('h2').textContent=b.dataset.title;
-  const image=certDialog.querySelector('img');image.src=src;image.alt=b.dataset.title+' - сертификат';
-  await image.decode();if(request!==panelRequest)return;
+  const image=usePreparedImage(certDialog,prepared);image.hidden=false;image.alt=b.dataset.title+' - сертификат';
   certDialog.dataset.mediaRatio=prepared.naturalWidth/prepared.naturalHeight;showPanel(certDialog);
+  certDialog.dataset.openMs=(performance.now()-started).toFixed(1);
  }catch(error){console.error('Certificate preview could not load',error);}
 }));
 certDialog.querySelector('.close').addEventListener('click',()=>hidePanel(certDialog));
@@ -147,19 +165,19 @@ document.querySelectorAll('img[data-src],[data-lazy-background]').forEach(el=>de
 
 // Prepare gallery assets after the first screen, before a visitor opens a preview.
 async function warmViewerMedia(){
- const idle=()=>new Promise(resolve=>{if('requestIdleCallback' in window)requestIdleCallback(resolve,{timeout:1500});else setTimeout(resolve,50);});
- const phones=[...document.querySelectorAll('.project-mobile-apps img.device-mockup')];
- let readyPhones=0;
- for(const image of phones){
-  await idle();
-  const src=image.dataset.src||image.src;
-  if(!viewerPhoneVectors.has(src))viewerPhoneVectors.set(src,fetch(src,{priority:'low'}).then(response=>{if(!response.ok)throw new Error('Phone preview unavailable');return response.text();}));
-  await viewerPhoneVectors.get(src).then(()=>{panelImageCache.dataset.readyPhones=String(++readyPhones);}).catch(()=>{});
+ let readyProjects=0;
+ for(const project of works){
+  if(project.phones)continue;
+  await viewerIdle();
+  await preparePanelImage(projectImageSource(project)).then(()=>{panelImageCache.dataset.readyProjects=String(++readyProjects);}).catch(()=>{});
+  if(project.mascot){await viewerIdle();await preparePanelImage(projectImageSource(project,false)).catch(()=>{});}
  }
+ await viewerIdle();await preparePanelImage('assets/unique-travel-background.webp').catch(()=>{});
+ await prepareViewerPhones().then(()=>{panelImageCache.dataset.readyPhones='2';}).catch(()=>{});
  for(const button of document.querySelectorAll('[data-cert]')){
-  await idle();await preparePanelImage('assets/'+button.dataset.cert).catch(()=>{});
+  await viewerIdle();await preparePanelImage('assets/'+button.dataset.cert).catch(()=>{});
  }
- await idle();await preparePanelImage('assets/unique-travel-background.webp').catch(()=>{});
+ panelImageCache.dataset.warmupComplete='true';
 }
 function scheduleViewerWarmup(){setTimeout(()=>{if('requestIdleCallback' in window)requestIdleCallback(warmViewerMedia,{timeout:1500});else warmViewerMedia();},2400);}
 if(document.readyState==='complete')scheduleViewerWarmup();else window.addEventListener('load',scheduleViewerWarmup,{once:true});
