@@ -41,7 +41,7 @@ works.push({key:'garden',title:'Garden',category:'Интерактивное д�
 
 works.unshift(
  {key:'unique-travel',title:'Unique Travel',category:'Приложения для iOS и Android',desc:'Два приложения для туристов и гидов, связанные с CRM.',stack:'React / TypeScript / Capacitor',private:true,phones:true},
- {key:'smile-vityk',title:'SMILE VITYK',category:'Сайт зубного техника',desc:'Сайт зуботехнической лаборатории с галереей работ, 3D-просмотром и бланком заказа в PDF. Для поиска настроены страницы услуг, метатеги и микроразметка.',stack:'HTML / CSS / JavaScript',image:'assets/smile-vityk.webp',site:'https://smilevityk.by/',private:true},
+ {key:'smile-vityk',title:'SMILE VITYK',category:'Сайт зубного техника',desc:'Сайт зуботехнической лаборатории с галереей работ, 3D-просмотром и бланком заказа в PDF. Настроены страницы услуг, метатеги и микроразметка.',stack:'HTML / CSS / JavaScript',image:'assets/smile-vityk.webp',site:'https://smilevityk.by/',private:true},
  {key:'agency-crm',title:'CRM агентства и Бип',staticTitle:'CRM агентства',category:'Приложение с анимированным помощником',desc:'Анимированный помощник Бип помогает освоить интерфейс, подсказывает действия и показывает нужные разделы.',staticDesc:'Заявки и клиенты в одной системе: канбан по этапам, история общения, заметки и планирование следующего контакта.',stack:'React / Node.js / SQLite',image:'assets/agency-crm-motion.webp',private:true,mascot:true}
 );
 
