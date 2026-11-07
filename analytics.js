@@ -94,7 +94,7 @@
     try { localStorage.setItem(storageKey, value); } catch {}
     banner.hidden = true;
     updateSettingsLabel();
-    if (settingsTrigger && settingsTrigger.isConnected) settingsTrigger.focus();
+    if (settingsTrigger && settingsTrigger.isConnected) settingsTrigger.focus({ preventScroll: true });
     if (value === 'granted') startAnalytics();
     else stopAnalytics();
   }
@@ -105,7 +105,7 @@
     button.addEventListener('click', () => {
       settingsTrigger = button;
       banner.hidden = false;
-      banner.querySelector('[data-consent]').focus();
+      banner.querySelector('[data-consent]').focus({ preventScroll: true });
     });
   });
   document.addEventListener('click', event => {
