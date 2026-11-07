@@ -322,3 +322,67 @@ body.panel-open::before{content:"";position:fixed;inset:0;z-index:99;background:
 .viewer-mobile .viewer-phones{height:100%;max-height:none;padding:12px 20px}
 .viewer-mobile .viewer-phones .app-devices{width:min(100cqw,160cqh)}
 @media(max-width:600px){.viewer header,.cert-viewer header{padding:8px 12px;height:56px;min-height:56px}.viewer h2,.cert-viewer h2{font-size:14px;line-height:1.4}.viewer-info{padding:10px 12px;gap:12px}.viewer-info p{font-size:12px}.viewer-info>a{padding:9px 12px;font-size:11px}.viewer-mobile .viewer-phones{padding:10px 12px}}
+
+/* Comfortable touch targets while preserving responsive navigation visibility. */
+@media(max-width:900px){
+  :where(.atelier nav .navigation a){display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px}
+  .viewer header,.cert-viewer header{height:auto;min-height:60px;padding:6px 12px}
+  .viewer .close,.cert-viewer .close{width:44px;height:44px;flex-basis:44px}
+}
+
+/* Keep navigation available and anchor headings clear of the sticky header. */
+.atelier:not(.service-page){--nav-height:72px}
+.atelier:not(.service-page)>.wrap>nav{position:sticky;top:0;height:var(--nav-height);z-index:30;background:var(--paper)}
+.atelier:not(.service-page)>.wrap>nav::before{content:"";position:absolute;inset:0 -6vw;background:var(--paper);z-index:-1}
+.atelier:not(.service-page) .hero-stage{isolation:isolate}
+.atelier:not(.service-page) section[id]{scroll-margin-top:calc(var(--nav-height) + 16px)}
+@media(min-width:901px){.atelier:not(.service-page) .hero-stage{left:-24px}}
+@media(max-width:900px){
+  .atelier:not(.service-page)>.wrap>nav::before{inset-inline:-5vw}
+  .atelier:not(.service-page) .navigation .nav-contact{display:inline-flex;align-items:center;justify-content:center}
+}
+@media(max-width:600px){
+  .atelier:not(.service-page){--nav-height:64px}
+  .atelier:not(.service-page)>.wrap>nav{gap:16px}
+  .atelier:not(.service-page) .navigation{gap:12px}
+  .atelier:not(.service-page) .navigation .nav-contact{padding:0;border:0;border-radius:0}
+  .atelier:not(.service-page) .intro{font-size:16px}
+  .atelier:not(.service-page) :is(.project p,.service-link p,.experience-intro,.achievement p){font-size:15px}
+  .atelier:not(.service-page) :is(.project .stack,.tools,.course>span){font-size:12px}
+  .atelier:not(.service-page) :is(.project-heading a,.skills p){font-size:13px}
+  .atelier:not(.service-page) .navigation{font-size:14px}
+  .atelier:not(.service-page) .course h3{font-size:16px}
+  .atelier:not(.service-page) .viewer-info{flex-direction:column;align-items:flex-start}
+  .atelier:not(.service-page) .viewer-info p{flex:none;width:100%;font-size:15px}
+  .atelier:not(.service-page) .viewer-info>a{font-size:13px}
+}
+
+/* Optional analytics stays outside the page flow and below project previews. */
+.analytics-notice{position:fixed;right:24px;bottom:24px;z-index:80;width:min(560px,calc(100% - 48px));padding:22px;background:var(--paper);border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 32px #203d3224}
+.analytics-notice[hidden]{display:none}
+.analytics-notice h2{font-size:18px;line-height:1.4;font-weight:500;margin:0 0 10px}
+.analytics-notice p{font-size:14px;line-height:1.6;color:var(--muted);margin:0}
+.analytics-notice p a{text-decoration:underline;text-underline-offset:3px}
+.analytics-actions{display:flex;gap:12px;margin-top:16px}
+.analytics-actions button{min-height:44px;padding:10px 20px;border:1px solid var(--ink);border-radius:24px;font-size:14px;line-height:1.4;color:var(--ink);background:transparent}
+.analytics-actions [data-consent="granted"]{background:var(--ink);color:var(--paper)}
+.footer-privacy{display:flex;gap:16px;flex-wrap:wrap}
+.footer-privacy a,.footer-privacy button{font:inherit;color:inherit;padding:0;text-decoration:underline;text-underline-offset:4px}
+.atelier footer{flex-wrap:wrap;gap:20px}
+.privacy-copy{max-width:760px;padding:56px 0 72px}
+.privacy-copy h1{font-family:var(--display);font-size:clamp(36px,5vw,60px);font-weight:400;line-height:1.15;letter-spacing:-1px;margin:0 0 24px}
+.privacy-copy h2{font-size:22px;font-weight:500;line-height:1.4;margin:32px 0 12px}
+.privacy-copy p,.privacy-copy li{font-size:16px;line-height:1.75;color:var(--muted);margin:12px 0}
+.privacy-copy a{text-decoration:underline;text-underline-offset:4px;overflow-wrap:anywhere}
+.privacy-copy ul{padding-left:22px}
+.privacy-copy .privacy-date{font-size:13px}
+.privacy-copy [data-analytics-settings]{min-height:44px;padding:10px 20px;margin:12px 0;border:1px solid var(--ink);border-radius:24px}
+@media(max-width:600px){
+  .analytics-notice{left:12px;right:12px;bottom:12px;width:auto;padding:16px}
+  .analytics-notice h2{font-size:16px;margin-bottom:8px}
+  .analytics-actions{gap:10px;margin-top:12px}
+  .analytics-actions button{flex:1;padding:10px 12px}
+  .footer-privacy{gap:12px;font-size:13px}
+  .privacy-copy{padding:36px 0 48px}
+  .privacy-copy h2{font-size:20px}
+}
